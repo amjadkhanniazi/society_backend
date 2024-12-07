@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const societySchema = new mongoose.Schema({
     name:{
@@ -34,7 +36,7 @@ const societySchema = new mongoose.Schema({
     }
 });
 
-userSchema.pre('save', async function(next){
+societySchema.pre('save', async function(next){
     if(!this.isModified('password')) return next();
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -43,32 +45,32 @@ userSchema.pre('save', async function(next){
 
 
 // Virtual field (for ease of querying)
-userSchema.virtual('Guard', {
+societySchema.virtual('Guard', {
     ref: 'Guard',
     localField: '_id',
     foreignField: 'societyID'
 });
 
 // Virtual field(for ease of querying)
-userSchema.virtual('Visitor', {
+societySchema.virtual('Visitor', {
     ref: 'Visitor',
     localField: '_id',
     foreignField: 'societyID'
 });
 
 // Virtual field(for ease of querying)
-userSchema.virtual('Log', {
+societySchema.virtual('Log', {
     ref: 'Log',
     localField: '_id',
     foreignField: 'societyID'
 });
 
-userSchema.methods.matchPassword = async function(enteredPassword){
+societySchema.methods.matchPassword = async function(enteredPassword){
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
-userSchema.methods.getSignedToken = function(){
-    return jwt.sign({id:this._id, username: this.email}, process.env.JWT_SECRET, {expiresIn:process.env.JWT_EXPIRE});
+societySchema.methods.getSignedToken = function(){
+    return jwt.sign({id:this._id, email: this.email}, process.env.Secret, {expiresIn:process.env.JWT_EXPIRE});
 }
 
 module.exports = mongoose.model('Society', societySchema);

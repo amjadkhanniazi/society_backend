@@ -19,9 +19,9 @@ router.get('/guards', authentication, async (req, res)=>{
 //get guard by id
 router.get('/guards/:id', authentication, async (req, res)=>{
     try{
-        const id = req.params.id;
+        const guardid = req.params.id;
 
-        const guardData = await guard.findById(id);
+        const guardData = await guard.findById(guardid);
         res.json(guardData);
     }catch(err){
         res.json({message: err});
@@ -29,11 +29,53 @@ router.get('/guards/:id', authentication, async (req, res)=>{
 });
 
 //add guard
-router.post('/guards', authentication, async (req, res)=>{
+router.post('/guards/register', authentication, async (req, res)=>{
     try{
-        const {} = new guard(req.body);
-        await guardData.save();
+        const { username, password, fullName, assignedGate } = req.body;
+        const guard = new guard({ username, password, fullName, assignedGate });
+        const guardData = await guard.save();
+        res.json({message: "Guard added successfully"});
     }catch(err){
         res.json({message: err});
     }
 });
+
+//update guard
+router.put('/guards/:id', authentication, async (req, res)=>{
+    try{
+        const guardid = req.params.id;
+        const { fullName, assignedGate } = req.body;
+
+        const guardData = await guard.findByIdAndUpdate(guardid, { fullName, assignedGate });
+        res.json({message: "Guard updated successfully"});
+    }catch(err){
+        res.json({message: err});
+    }
+});
+
+//delete guard
+router.delete('/guards/:id', authentication, async (req, res)=>{
+    try{
+        const guardid = req.params.id;
+
+        const guardData = await guard.findByIdAndDelete(guardid);
+        res.json({message: "Guard deleted successfully"});
+    }catch(err){
+        res.json({message: err});
+    }
+});
+
+//guard change password
+router.put('/guards/:id/change-password', authentication, async (req, res)=>{
+    try{
+        const guardid = req.params.id;
+        const { password } = req.body;
+
+        const guardData = await guard.findByIdAndUpdate(guardid, { password });
+        res.json({message: "Password changed successfully"});
+    }catch(err){
+        res.json({message: err});
+        }
+});
+
+module.exports = router;

@@ -9,6 +9,11 @@ const guardSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    email:{
+        type:String,
+        required:true,
+        unique:true
+    },
     password:{
         type:String,
         required:true
@@ -36,14 +41,14 @@ const guardSchema = new mongoose.Schema({
 });
 
 // Virtual field (for ease of querying)
-userSchema.virtual('Visitor', {
+guardSchema.virtual('Visitor', {
     ref: 'Visitor',
     localField: '_id',
     foreignField: 'guardID'
 });
 
 // Virtual field(for ease of querying)
-userSchema.virtual('Log', {
+guardSchema.virtual('Log', {
     ref: 'Log',
     localField: '_id',
     foreignField: 'guardID'
