@@ -29,11 +29,12 @@ const societySchema = new mongoose.Schema({
     createdAt:{
         type:Date,
         default:Date.now
-    },
-    updatedAt:{
-        type:Date,
-        default:Date.now
     }
+},
+{
+    timestamps:true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 societySchema.pre('save', async function(next){
@@ -45,7 +46,7 @@ societySchema.pre('save', async function(next){
 
 
 // Virtual field (for ease of querying)
-societySchema.virtual('Guard', {
+societySchema.virtual('guard', {
     ref: 'Guard',
     localField: '_id',
     foreignField: 'societyID'
@@ -72,5 +73,4 @@ societySchema.methods.matchPassword = async function(enteredPassword){
 societySchema.methods.getSignedToken = function(){
     return jwt.sign({id:this._id, email: this.email}, process.env.Secret, {expiresIn:process.env.JWT_EXPIRE});
 }
-
 module.exports = mongoose.model('Society', societySchema);

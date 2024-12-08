@@ -36,19 +36,16 @@ const visitorSchema = new mongoose.Schema({
     },
     personImage:{
         type:String
-    },
-    createdAt:{
-        type:Date,
-        default:Date.now
-    },
-    updatedAt:{
-        type:Date,
-        default:Date.now
     }
+},
+{
+    timestamps:true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 // Virtual field(for ease of querying)
-userSchema.virtual('Log', {
+userSchema.virtual('log', {
     ref: 'Log',
     localField: '_id',
     foreignField: 'visitorID'

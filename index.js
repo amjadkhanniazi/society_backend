@@ -4,6 +4,7 @@ require('dotenv').config();
 const connectDB = require('./config/db.js');
 
 const societyRoutes = require('./route/societyRoutes');
+const guardRoutes = require('./route/guardRoutes');
 
 
 const app=express();
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 
 app.use('/society', societyRoutes);
+app.use('/guard', guardRoutes);
 
 
 app.get('/', (req, res) => {
