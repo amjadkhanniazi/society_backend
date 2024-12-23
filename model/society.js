@@ -25,10 +25,6 @@ const societySchema = new mongoose.Schema({
     contactNumber:{
         type:Number,
         required:true
-    },
-    createdAt:{
-        type:Date,
-        default:Date.now
     }
 },
 {

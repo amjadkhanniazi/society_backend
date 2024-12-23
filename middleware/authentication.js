@@ -17,7 +17,7 @@ const authenticateToken = (req, res, next) => {
         if (err) return res.status(403).json({ message: 'Forbidden' });
         //check user credentials in societyUsers and guardUsers
         const societyUser = await SocietyUsers.findOne({ email: user.email });
-        const guardUser = await guardUsers.findOne({ email: user.email });
+        const guardUser = await guardUsers.findOne({ username: user.username });
         if (!societyUser && !guardUser) return res.status(401).json({ message: 'Unauthorized' });
         req.user = user;
         next();

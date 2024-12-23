@@ -20,7 +20,7 @@ const visitorSchema = new mongoose.Schema({
     exitTime:{
         type:Date
     },
-    IDNumber:{
+    idNumber:{
         type:Number,
         required:true
     },
@@ -28,13 +28,16 @@ const visitorSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    IDImage:{
+    idImage:{
         type:String
     },
     vehicleImage:{
         type:String
     },
     personImage:{
+        type:String
+    },
+    comments:{
         type:String
     }
 },
@@ -45,7 +48,7 @@ const visitorSchema = new mongoose.Schema({
 });
 
 // Virtual field(for ease of querying)
-userSchema.virtual('log', {
+visitorSchema.virtual('log', {
     ref: 'Log',
     localField: '_id',
     foreignField: 'visitorID'

@@ -27,10 +27,6 @@ const guardSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    assignedGate: {
-        type: String,
-        required: true
-    },
     contactNumber: {
         type: String,
         required: true
